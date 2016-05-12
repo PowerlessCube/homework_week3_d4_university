@@ -20,13 +20,13 @@ attr_reader( :id )
       #{@student_id},
       #{@course_id} )
     RETURNING * ;"
-    return Timtable.map_item( sql )
+    return Timetable.map_items( sql )
   end
 
   def self.all
     sql =
-    "SELECT * FROM timetable"
-    SqlRunner.run( sql )
+    "SELECT * FROM timetables"
+    return Timetable.map_items( sql )
   end
 
 #Helper functions
@@ -36,13 +36,13 @@ attr_reader( :id )
     SqlRunner.run( sql )
   end
 
-  def self.map_items
+  def self.map_items( sql )
     timetables = SqlRunner.run( sql )
     result = timetables.map { | timetable | Timetable.new( timetable ) }
     return result
   end
 
-  def self.map_item
+  def self.map_item( sql )
     result = Timetable.map_items( sql )
     return result.first
   end

@@ -29,10 +29,10 @@ attr_reader( :id )
     sql =
     "SELECT c.*
     FROM courses c
-    INNER JOIN timetable.t
+    INNER JOIN timetables t
     ON t.course_id = c.id
     WHERE student_id = #{@id};"
-    SqlRunner.run( sql )
+    return Student.map_items( sql )
   end
 
 #Helper functions, DRY (Class)
@@ -42,12 +42,12 @@ attr_reader( :id )
     SqlRunner.run( sql )
   end
 
-  def self.map_item
+  def self.map_item( sql )
     result = Student.map_items( sql )
     return result.first
   end
 
-  def self.map_items
+  def self.map_items( sql )
     students = SqlRunner.run( sql )
     result = students.map { | student | Student.new( student ) }
     return result
