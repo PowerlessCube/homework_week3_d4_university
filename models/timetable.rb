@@ -1,3 +1,5 @@
+require( 'pg' )
+
 class Timetable
 
 attr_accessor( :student_id, :class_id  )
@@ -10,11 +12,21 @@ attr_reader( :id )
   end
 
   def save
-#allows new entries to be created.
+    sql =
+    "INSERT INTO timetables (
+      student_id,
+      course_id )
+    VALUES (
+      #{@student_id},
+      #{@course_id} )
+    RETURNING * ;"
+    return Timtable.map_item( sql )
   end
 
   def self.all
-#lists all students (class method)
+    sql =
+    "SELECT * FROM timetable"
+    SqlRunner.run( sql )
   end
 
 #Helper functions

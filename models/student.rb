@@ -1,3 +1,6 @@
+require( 'pg' )
+require_relative( '../db/sql_runner' )
+
 class Student
 
 attr_accessor( :name )
@@ -11,15 +14,25 @@ attr_reader( :id )
   def save
     sql =
     "INSERT INTO students ( name )
-    VALUES ( '#{@name}' )"
+    VALUES ( '#{@name}' )
+    RETURNING * ;"
+    return Student.map_item( sql )
   end
 
   def self.all
-#lists all students (class method)
+    sql =
+    "SELECT * FROM students"
+    return Student.map_items( sql )
   end
 
   def courses
-#will display a list of students in the student.
+    sql =
+    "SELECT c.*
+    FROM courses c
+    INNER JOIN timetable.t
+    ON t.course_id = c.id
+    WHERE student_id = #{@id};"
+    SqlRunner.run( sql )
   end
 
 #Helper functions, DRY (Class)
